@@ -1,0 +1,32 @@
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR(36) PRIMARY KEY,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS auth_codes (
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36) NOT NULL,
+    code VARCHAR(6) NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36) NOT NULL,
+    number VARCHAR(20) NOT NULL,
+    balance_in_kopecks INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS card_transactions (
+    id VARCHAR(36) PRIMARY KEY,
+    card_from_id VARCHAR(36) NOT NULL,
+    card_to_id VARCHAR(36) NOT NULL,
+    amount_in_kopecks INT NOT NULL,
+    transaction_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (card_from_id) REFERENCES cards(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_to_id) REFERENCES cards(id) ON DELETE CASCADE
+);
