@@ -10,28 +10,19 @@ public class VerificationPage {
     private SelenideElement verifyButton = $("[data-test-id=action-verify]");
     private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
-    private void fillCode(String code) {
+    private void fillCodeAndSubmit(String code) {
         codeField.setValue(code);
-    }
-
-    private void clickVerifyButton() {
         verifyButton.click();
     }
 
     public DashboardPage validVerify(String verificationCode) {
-        fillCode(verificationCode);
-        clickVerifyButton();
+        fillCodeAndSubmit(verificationCode);
         return new DashboardPage();
     }
 
     public void invalidVerify(String verificationCode) {
-        fillCode(verificationCode);
-        clickVerifyButton();
-        errorNotification.shouldBe(visible);
-    }
-
-    public void checkErrorNotificationVisible() {
-        errorNotification.shouldBe(visible);
+        fillCodeAndSubmit(verificationCode);
+        checkErrorNotificationText("Ошибка! Неверно указан код");
     }
 
     public void checkErrorNotificationText(String expectedText) {

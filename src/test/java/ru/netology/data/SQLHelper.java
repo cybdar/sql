@@ -48,21 +48,6 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static String getVerificationCodeForUser(String login) {
-        String userId = getUserId(login);
-        if (userId == null) return null;
-        return getVerificationCode(userId);
-    }
-
-    @SneakyThrows
-    public static void addAuthCode(String userId, String code) {
-        var sql = "INSERT INTO auth_codes(id, user_id, code) VALUES (?, ?, ?)";
-        try (var conn = getConnection()) {
-            runner.update(conn, sql, UUID.randomUUID().toString(), userId, code);
-        }
-    }
-
-    @SneakyThrows
     public static String getUserStatus(String login) {
         var sql = "SELECT status FROM users WHERE login = ?";
         try (var conn = getConnection()) {
@@ -76,16 +61,6 @@ public class SQLHelper {
         try (var conn = getConnection()) {
             runner.update(conn, sql, status, login);
         }
-    }
-
-    @SneakyThrows
-    public static void blockUser(String login) {
-        setUserStatus(login, "blocked");
-    }
-
-    @SneakyThrows
-    public static void unblockUser(String login) {
-        setUserStatus(login, "active");
     }
 
     @SneakyThrows

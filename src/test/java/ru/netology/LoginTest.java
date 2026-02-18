@@ -21,8 +21,8 @@ public class LoginTest {
         open("http://localhost:9999");
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDownAll() {
         SQLHelper.cleanDatabase();
     }
 
@@ -55,7 +55,6 @@ public class LoginTest {
                     DataHelper.getInvalidPasswordForUser(authInfo.getLogin())
             );
             loginPage.invalidLogin(invalidAuthInfo);
-            loginPage.checkErrorNotificationVisible();
         }
 
         String status = SQLHelper.getUserStatus(authInfo.getLogin());
@@ -72,6 +71,5 @@ public class LoginTest {
 
         String invalidCode = DataHelper.getRandomVerificationCode();
         verificationPage.invalidVerify(invalidCode);
-        verificationPage.checkErrorNotificationVisible();
     }
 }

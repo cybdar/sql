@@ -24,14 +24,6 @@ public class DataHelper {
         return new AuthInfo("vasya", "qwerty123");
     }
 
-    public static AuthInfo getValidPetyaAuthInfo() {
-        return new AuthInfo("petya", "123qwerty");
-    }
-
-    public static AuthInfo getInvalidAuthInfo() {
-        return new AuthInfo(faker.name().username(), faker.internet().password());
-    }
-
     public static String getInvalidPasswordForUser(String login) {
         return faker.internet().password();
     }

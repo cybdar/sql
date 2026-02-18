@@ -15,26 +15,17 @@ public class LoginPage {
     private void fillLoginForm(DataHelper.AuthInfo authInfo) {
         loginField.setValue(authInfo.getLogin());
         passwordField.setValue(authInfo.getPassword());
-    }
-
-    private void clickLoginButton() {
         loginButton.click();
     }
 
     public VerificationPage validLogin(DataHelper.AuthInfo authInfo) {
         fillLoginForm(authInfo);
-        clickLoginButton();
         return new VerificationPage();
     }
 
     public void invalidLogin(DataHelper.AuthInfo authInfo) {
         fillLoginForm(authInfo);
-        clickLoginButton();
-        errorNotification.shouldBe(visible);
-    }
-
-    public void checkErrorNotificationVisible() {
-        errorNotification.shouldBe(visible);
+        checkErrorNotificationText("Ошибка! Неверно указан логин или пароль");
     }
 
     public void checkErrorNotificationText(String expectedText) {
