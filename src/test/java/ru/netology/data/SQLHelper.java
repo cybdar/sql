@@ -1,9 +1,8 @@
-package netology.data;
+package ru.netology.data;
 
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.UUID;
@@ -11,8 +10,7 @@ import java.util.UUID;
 public class SQLHelper {
     private static final QueryRunner runner = new QueryRunner();
 
-    private SQLHelper() {
-    }
+    private SQLHelper() {}
 
     @SneakyThrows
     private static Connection getConnection() {
@@ -21,14 +19,6 @@ public class SQLHelper {
                 "app",
                 "pass"
         );
-    }
-
-    @SneakyThrows
-    public static void updateUsers(String login, String password) {
-        var sql = "INSERT INTO users(id, login, password, status) VALUES (?, ?, ?, 'active')";
-        try (var conn = getConnection()) {
-            runner.update(conn, sql, UUID.randomUUID().toString(), login, password);
-        }
     }
 
     @SneakyThrows
@@ -42,14 +32,26 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static String getVerificationCodeForUser(String login) {
-        var sql = "SELECT code FROM auth_codes ac " +
-                "JOIN users u ON ac.user_id = u.id " +
-                "WHERE u.login = ? " +
-                "ORDER BY ac.created DESC LIMIT 1";
+    public static String getUserId(String login) {
+        var sql = "SELECT id FROM users WHERE login = ?";
         try (var conn = getConnection()) {
             return runner.query(conn, sql, new ScalarHandler<>(), login);
         }
+    }
+
+    @SneakyThrows
+    public static String getVerificationCode(String userId) {
+        var sql = "SELECT code FROM auth_codes WHERE user_id = ? ORDER BY created DESC LIMIT 1";
+        try (var conn = getConnection()) {
+            return runner.query(conn, sql, new ScalarHandler<>(), userId);
+        }
+    }
+
+    @SneakyThrows
+    public static String getVerificationCodeForUser(String login) {
+        String userId = getUserId(login);
+        if (userId == null) return null;
+        return getVerificationCode(userId);
     }
 
     @SneakyThrows
@@ -57,14 +59,6 @@ public class SQLHelper {
         var sql = "INSERT INTO auth_codes(id, user_id, code) VALUES (?, ?, ?)";
         try (var conn = getConnection()) {
             runner.update(conn, sql, UUID.randomUUID().toString(), userId, code);
-        }
-    }
-
-    @SneakyThrows
-    public static String getUserId(String login) {
-        var sql = "SELECT id FROM users WHERE login = ?";
-        try (var conn = getConnection()) {
-            return runner.query(conn, sql, new ScalarHandler<>(), login);
         }
     }
 
@@ -92,5 +86,13 @@ public class SQLHelper {
     @SneakyThrows
     public static void unblockUser(String login) {
         setUserStatus(login, "active");
+    }
+
+    @SneakyThrows
+    public static void addUser(String login, String passwordHash, String status) {
+        var sql = "INSERT INTO users(id, login, password, status) VALUES (?, ?, ?, ?)";
+        try (var conn = getConnection()) {
+            runner.update(conn, sql, UUID.randomUUID().toString(), login, passwordHash, status);
+        }
     }
 }

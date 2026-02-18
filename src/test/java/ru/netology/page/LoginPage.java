@@ -1,9 +1,9 @@
-package netology.page;
+package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.data.DataHelper;
 
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
@@ -12,21 +12,32 @@ public class LoginPage {
     private SelenideElement loginButton = $("[data-test-id=action-login]");
     private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
-    public VerificationPage validLogin(DataHelper.AuthInfo authInfo) {
+    private void fillLoginForm(DataHelper.AuthInfo authInfo) {
         loginField.setValue(authInfo.getLogin());
         passwordField.setValue(authInfo.getPassword());
+    }
+
+    private void clickLoginButton() {
         loginButton.click();
+    }
+
+    public VerificationPage validLogin(DataHelper.AuthInfo authInfo) {
+        fillLoginForm(authInfo);
+        clickLoginButton();
         return new VerificationPage();
     }
 
     public void invalidLogin(DataHelper.AuthInfo authInfo) {
-        loginField.setValue(authInfo.getLogin());
-        passwordField.setValue(authInfo.getPassword());
-        loginButton.click();
+        fillLoginForm(authInfo);
+        clickLoginButton();
         errorNotification.shouldBe(visible);
     }
 
-    public void shouldShowErrorNotification() {
+    public void checkErrorNotificationVisible() {
         errorNotification.shouldBe(visible);
+    }
+
+    public void checkErrorNotificationText(String expectedText) {
+        errorNotification.shouldBe(visible).shouldHave(exactText(expectedText));
     }
 }
