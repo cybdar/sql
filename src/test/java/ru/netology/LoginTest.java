@@ -15,9 +15,7 @@ public class LoginTest {
 
     @BeforeEach
     void setUp() {
-        SQLHelper.cleanDatabase();
-        SQLHelper.addUser("vasya", DataHelper.getEncryptedPassword(), "active");
-        SQLHelper.addUser("petya", DataHelper.getEncryptedPassword(), "active");
+        // Не чистим БД перед каждым тестом - пользователи уже есть от приложения
         open("http://localhost:9999");
     }
 
@@ -35,8 +33,9 @@ public class LoginTest {
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
 
         String userId = SQLHelper.getUserId(authInfo.getLogin());
-        String verificationCode = SQLHelper.getVerificationCode(userId);
+        assertNotNull(userId, "User should exist in database");
 
+        String verificationCode = SQLHelper.getVerificationCode(userId);
         assertNotNull(verificationCode, "Verification code should be generated in database");
 
         DashboardPage dashboardPage = verificationPage.validVerify(verificationCode);
