@@ -22,7 +22,7 @@ public class VerificationPage {
 
     public void invalidVerify(String verificationCode) {
         fillCodeAndSubmit(verificationCode);
-        checkErrorNotificationText("Ошибка! Неверно указан код! Попробуйте ещё раз.");
+        checkErrorNotificationText("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
     }
 
     public void checkErrorNotificationText(String expectedText) {
