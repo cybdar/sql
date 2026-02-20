@@ -25,7 +25,7 @@ public class LoginPage {
 
     public void invalidLogin(DataHelper.AuthInfo authInfo) {
         fillLoginForm(authInfo);
-        checkErrorNotificationText("Ошибка\nНеверно указан логин или пароль");
+        checkErrorNotificationText("Ошибка! Неверно указан логин или пароль");
     }
 
     public void checkErrorNotificationText(String expectedText) {
