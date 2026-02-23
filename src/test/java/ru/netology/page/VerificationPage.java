@@ -2,6 +2,8 @@ package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -26,6 +28,6 @@ public class VerificationPage {
     }
 
     public void checkErrorNotificationText(String expectedText) {
-        errorNotification.shouldBe(visible).shouldHave(exactText(expectedText));
+        errorNotification.shouldBe(visible, Duration.ofSeconds(10)).shouldHave(exactText(expectedText));
     }
 }

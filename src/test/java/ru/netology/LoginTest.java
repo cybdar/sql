@@ -15,7 +15,6 @@ public class LoginTest {
 
     @BeforeEach
     void setUp() {
-        // Не чистим БД перед каждым тестом - пользователи уже есть от приложения
         open("http://localhost:9999");
     }
 
