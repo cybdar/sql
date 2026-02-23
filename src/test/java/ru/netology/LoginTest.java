@@ -30,6 +30,7 @@ public class LoginTest {
         DataHelper.AuthInfo authInfo = DataHelper.getValidAuthInfo();
 
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.shouldBeVisible();
 
         String userId = SQLHelper.getUserId(authInfo.getLogin());
         assertNotNull(userId, "User should exist in database");
@@ -66,6 +67,7 @@ public class LoginTest {
         DataHelper.AuthInfo authInfo = DataHelper.getValidAuthInfo();
 
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.shouldBeVisible();
 
         String invalidCode = DataHelper.getRandomVerificationCode();
         verificationPage.invalidVerify(invalidCode);
